@@ -126,37 +126,41 @@ func ExampleErrorHandler() {
 	spew.Printf("m3 := monad.FromTuple(1, nil) -> Value: %#v\n", m3.Value())
 	spew.Printf("m3 := monad.FromTuple(1, nil) -> Error: %#v\n", m3.Error())
 
+	m4 := monad.FromTuple(1, errors.New("test"))
+	spew.Printf("m4 := monad.FromTuple(1, errors.New(\"test\")) -> Value: %#v\n", m4.Value())
+	spew.Printf("m4 := monad.FromTuple(1, errors.New(\"test\")) -> Error: %#v\n", m4.Error())
+
 	spew.Println("\nBind:")
 	spew.Println("=====")
 
-	m4 := m1.Bind(func(x int) (int, error) { return x * 2, nil })
+	m5 := m1.Bind(func(x int) (int, error) { return x * 2, nil })
 	spew.Printf(
-		"m4 := m1.Bind(func(x int) (int, error) { return x * 2, nil }) -> Value: %#v\n",
-		m4.Value(),
-	)
-	spew.Printf(
-		"m4 := m1.Bind(func(x int) (int, error) { return x * 2, nil }) -> Error: %#v\n",
-		m4.Error(),
-	)
-
-	m5 := m4.Bind(func(_ int) (int, error) { return 0, errors.New("test") })
-	spew.Printf(
-		"m5 := m4.Bind(func(_ int) (int, error) { return 0, errors.New(\"test\") }) -> Value: %#v\n",
+		"m5 := m1.Bind(func(x int) (int, error) { return x * 2, nil }) -> Value: %#v\n",
 		m5.Value(),
 	)
 	spew.Printf(
-		"m5 := m4.Bind(func(_ int) (int, error) { return 0, errors.New(\"test\") }) -> Error: %#v\n",
+		"m5 := m1.Bind(func(x int) (int, error) { return x * 2, nil }) -> Error: %#v\n",
 		m5.Error(),
 	)
 
-	m6 := m2.Bind(func(x int) (int, error) { return x * 2, nil })
+	m6 := m5.Bind(func(_ int) (int, error) { return 0, errors.New("test") })
 	spew.Printf(
-		"m6 := m2.Bind(func(x int) (int, error) { return x * 2, nil }) -> Value: %#v\n",
+		"m6 := m5.Bind(func(_ int) (int, error) { return 0, errors.New(\"test\") }) -> Value: %#v\n",
 		m6.Value(),
 	)
 	spew.Printf(
-		"m6 := m2.Bind(func(x int) (int, error) { return x * 2, nil }) -> Error: %#v\n",
+		"m6 := m5.Bind(func(_ int) (int, error) { return 0, errors.New(\"test\") }) -> Error: %#v\n",
 		m6.Error(),
+	)
+
+	m7 := m2.Bind(func(x int) (int, error) { return x * 2, nil })
+	spew.Printf(
+		"m7 := m2.Bind(func(x int) (int, error) { return x * 2, nil }) -> Value: %#v\n",
+		m7.Value(),
+	)
+	spew.Printf(
+		"m7 := m2.Bind(func(x int) (int, error) { return x * 2, nil }) -> Error: %#v\n",
+		m7.Error(),
 	)
 
 	// Output:
@@ -170,13 +174,15 @@ func ExampleErrorHandler() {
 	// m2 := monad.Fail[int](errors.New("test")) -> Error: (*errors.errorString)test
 	// m3 := monad.FromTuple(1, nil) -> Value: (int)1
 	// m3 := monad.FromTuple(1, nil) -> Error: (interface {})<nil>
+	// m4 := monad.FromTuple(1, errors.New("test")) -> Value: (int)0
+	// m4 := monad.FromTuple(1, errors.New("test")) -> Error: (*errors.errorString)test
 	//
 	// Bind:
 	// =====
-	// m4 := m1.Bind(func(x int) (int, error) { return x * 2, nil }) -> Value: (int)2
-	// m4 := m1.Bind(func(x int) (int, error) { return x * 2, nil }) -> Error: (interface {})<nil>
-	// m5 := m4.Bind(func(_ int) (int, error) { return 0, errors.New("test") }) -> Value: (int)0
-	// m5 := m4.Bind(func(_ int) (int, error) { return 0, errors.New("test") }) -> Error: (*errors.errorString)test
-	// m6 := m2.Bind(func(x int) (int, error) { return x * 2, nil }) -> Value: (int)0
-	// m6 := m2.Bind(func(x int) (int, error) { return x * 2, nil }) -> Error: (*errors.errorString)test
+	// m5 := m1.Bind(func(x int) (int, error) { return x * 2, nil }) -> Value: (int)2
+	// m5 := m1.Bind(func(x int) (int, error) { return x * 2, nil }) -> Error: (interface {})<nil>
+	// m6 := m5.Bind(func(_ int) (int, error) { return 0, errors.New("test") }) -> Value: (int)0
+	// m6 := m5.Bind(func(_ int) (int, error) { return 0, errors.New("test") }) -> Error: (*errors.errorString)test
+	// m7 := m2.Bind(func(x int) (int, error) { return x * 2, nil }) -> Value: (int)0
+	// m7 := m2.Bind(func(x int) (int, error) { return x * 2, nil }) -> Error: (*errors.errorString)test
 }
