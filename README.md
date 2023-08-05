@@ -1,6 +1,6 @@
 # monad
 
-![Go Version](https://img.shields.io/badge/Go-%3E%3D%201.18-%23007d9c)
+![Go Version](https://img.shields.io/badge/Go-%3E%3D%201.20-%23007d9c)
 [![GoDoc](https://godoc.org/github.com/denisdubochevalier/monad?status.svg)](https://pkg.go.dev/github.com/denisdubochevalier/monad)
 ![Build Status](https://github.com/denisdubochevalier/monad/actions/workflows/go.yml/badge.svg)
 [![Go report](https://goreportcard.com/badge/github.com/denisdubochevalier/monad)](https://goreportcard.com/report/github.com/denisdubochevalier/monad)
