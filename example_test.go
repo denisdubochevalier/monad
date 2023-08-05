@@ -14,8 +14,8 @@ func ExampleMaybe() {
 		"Computing example monad.Maybe values, showing what calling the .Value() method on them returns:\n",
 	)
 	spew.Println("Creation:\n=========")
-	m1 := monad.New(5)
-	spew.Printf("m1 := monad.New(5) -> %#v\n", m1.Value())
+	m1 := monad.OfValue(5)
+	spew.Printf("m1 := monad.OfValue(5) -> %#v\n", m1.Value())
 
 	m2 := monad.OfNullable[int](new(int))
 	spew.Printf("m2 := monad.OfNullable[int](new(int)) -> %#v\n", m2.Value())
@@ -24,9 +24,9 @@ func ExampleMaybe() {
 	spew.Printf("m3 := monad.Empty[any]() -> %#v\n", m3.Value())
 
 	spew.Println("\nMap:\n====")
-	m4 := monad.Map(monad.New[int](5), strconv.Itoa)
+	m4 := monad.Map(monad.OfValue[int](5), strconv.Itoa)
 	spew.Printf(
-		"m4 := monad.Map(monad.New(5), strconv.Itoa) -> %#v\n",
+		"m4 := monad.Map(monad.OfValue(5), strconv.Itoa) -> %#v\n",
 		m4.Value(),
 	)
 
@@ -58,15 +58,15 @@ func ExampleMaybe() {
 	)
 
 	spew.Println("\nFilter:\n=======")
-	m9 := monad.New(5).Filter(func(x int) bool { return x%2 == 0 })
+	m9 := monad.OfValue(5).Filter(func(x int) bool { return x%2 == 0 })
 	spew.Printf(
-		"m9 := monad.New(5).Filter(func(x int) bool { return x %% 2 == 0 }) -> %#v\n",
+		"m9 := monad.OfValue(5).Filter(func(x int) bool { return x %% 2 == 0 }) -> %#v\n",
 		m9.Value(),
 	)
 
-	m10 := monad.New(6).Filter(func(x int) bool { return x%2 == 0 })
+	m10 := monad.OfValue(6).Filter(func(x int) bool { return x%2 == 0 })
 	spew.Printf(
-		"m10 := monad.New(6).Filter(func(x int) bool { return x %% 2 == 0 }) -> %#v\n",
+		"m10 := monad.OfValue(6).Filter(func(x int) bool { return x %% 2 == 0 }) -> %#v\n",
 		m10.Value(),
 	)
 
@@ -83,8 +83,8 @@ func ExampleMaybe() {
 	)
 
 	spew.Println("\nOrElse:\n=======")
-	v1 := monad.New(1).OrElse(2)
-	spew.Printf("v1 := monad.New(1).OrElse(2) -> %#v\n", v1)
+	v1 := monad.OfValue(1).OrElse(2)
+	spew.Printf("v1 := monad.OfValue(1).OrElse(2) -> %#v\n", v1)
 	v2 := monad.Empty[int]().OrElse(2)
 	spew.Printf("v2 := monad.Empty[int]().OrElse(2) -> %#v\n", v2)
 
@@ -93,13 +93,13 @@ func ExampleMaybe() {
 	//
 	// Creation:
 	// =========
-	// m1 := monad.New(5) -> (int)5
+	// m1 := monad.OfValue(5) -> (int)5
 	// m2 := monad.OfNullable[int](new(int)) -> (int)0
 	// m3 := monad.Empty[any]() -> (interface {})<nil>
 	//
 	// Map:
 	// ====
-	// m4 := monad.Map(monad.New(5), strconv.Itoa) -> (string)5
+	// m4 := monad.Map(monad.OfValue(5), strconv.Itoa) -> (string)5
 	// m5 := monad.Map(divideBy(6, 3), func(x int) int { return x * 2 }) -> (int)4
 	// m6 := monad.Map(divideBy(6, 0), func(x int) int { return x * 2 }) -> (int)0
 	// m7 := monad.FlatMap[int, int](divideBy(6, 0), func(x int) monad.Maybe[int] { return divideBy(0, 7) }) -> (int)0
@@ -107,14 +107,14 @@ func ExampleMaybe() {
 	//
 	// Filter:
 	// =======
-	// m9 := monad.New(5).Filter(func(x int) bool { return x % 2 == 0 }) -> (int)0
-	// m10 := monad.New(6).Filter(func(x int) bool { return x % 2 == 0 }) -> (int)6
+	// m9 := monad.OfValue(5).Filter(func(x int) bool { return x % 2 == 0 }) -> (int)0
+	// m10 := monad.OfValue(6).Filter(func(x int) bool { return x % 2 == 0 }) -> (int)6
 	// m11 := monad.Empty[int].Filter(func(x int) bool { return x % 2 == 0 }) -> (int)0
 	// m12 := monad.OfNullable[int](nil).Filter(func(x int) bool { return x % 2 == 0 }) -> (int)0
 	//
 	// OrElse:
 	// =======
-	// v1 := monad.New(1).OrElse(2) -> (int)1
+	// v1 := monad.OfValue(1).OrElse(2) -> (int)1
 	// v2 := monad.Empty[int]().OrElse(2) -> (int)2
 }
 
@@ -122,7 +122,7 @@ func divideBy(x, y int) monad.Maybe[int] {
 	if y == 0 {
 		return monad.Empty[int]()
 	}
-	return monad.New[int](x / y)
+	return monad.OfValue[int](x / y)
 }
 
 func ExampleErrorHandler() {

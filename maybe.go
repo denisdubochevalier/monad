@@ -49,8 +49,8 @@ func (n Nothing[T]) Filter(_ Predicate[T]) Maybe[T] {
 	return n
 }
 
-// New creates a Just Maybe from a value
-func New[T any](x T) Maybe[T] {
+// OfValue creates a Just Maybe from a value
+func OfValue[T any](x T) Maybe[T] {
 	return Just[T]{val: x}
 }
 
@@ -64,7 +64,7 @@ func OfNullable[T any](x *T) Maybe[T] {
 	if x == nil {
 		return Empty[T]()
 	}
-	return New[T](*x)
+	return OfValue[T](*x)
 }
 
 // Map applies a Func to a Maybe
