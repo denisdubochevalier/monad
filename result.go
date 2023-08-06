@@ -97,11 +97,8 @@ func (f Failure[_]) Success() bool {
 
 // Or executes the callback on the error and returns a new Failure with the result of the error - or the same Failure if error returned is nil
 func (f Failure[T]) Or(fn ErrFunc) Result[T] {
-	err := fn(f.err)
-	if err == nil {
-		return f
-	}
-	return Fail[T](err)
+	fn(f.err)
+	return f
 }
 
 // Fail creates a Failure
