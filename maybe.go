@@ -30,17 +30,17 @@ func (j Just[T]) Filter(p Predicate[T]) Maybe[T] {
 	if p(j.val) {
 		return j
 	}
-	return Nothing[T]{}
+	return None[T]()
 }
 
 // Bind executes a function that returns a nillable object on the value and returns a Maybe
 func (j Just[T]) Bind(n Nilable[T]) Maybe[T] {
-	return OfNullable(n(j.val))
+	return Nullable(n(j.val))
 }
 
 // FMap applies a callback to the value
 func (j Just[T]) FMap(t Transformable[T]) Maybe[T] {
-	return OfValue(t(j.val))
+	return Some(t(j.val))
 }
 
 // Nothing represents an empty Maybe of type T
@@ -71,20 +71,20 @@ func (n Nothing[T]) FMap(_ Transformable[T]) Maybe[T] {
 	return n
 }
 
-// OfValue creates a Just Maybe from a value
-func OfValue[T any](x T) Maybe[T] {
+// Some creates a Just Maybe from a value
+func Some[T any](x T) Maybe[T] {
 	return Just[T]{val: x}
 }
 
-// Empty creates a Nothing Maybe
-func Empty[T any]() Maybe[T] {
+// None creates a Nothing Maybe
+func None[T any]() Maybe[T] {
 	return Nothing[T]{}
 }
 
-// OfNullable creates a Maybe from its input, Nothing if it is nil, Just elseway
-func OfNullable[T any](x *T) Maybe[T] {
+// Nullable creates a Maybe from its input, Nothing if it is nil, Just elseway
+func Nullable[T any](x *T) Maybe[T] {
 	if x == nil {
-		return Empty[T]()
+		return None[T]()
 	}
-	return OfValue[T](*x)
+	return Some[T](*x)
 }
