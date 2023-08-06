@@ -6,8 +6,8 @@ type Result[T any] interface {
 	Value() T
 	Failure() bool
 	Success() bool
-	Bind(Func0[T]) Result[T]
-	FMap(Func1[T]) Result[T]
+	Bind(Failable[T]) Result[T]
+	FMap(Transformable[T]) Result[T]
 	Or(ErrFunc) Result[T]
 }
 
@@ -37,7 +37,7 @@ func (s Success[_]) Success() bool {
 }
 
 // Bind executes the callback function and returns a Result object
-func (s Success[T]) Bind(f Func0[T]) Result[T] {
+func (s Success[T]) Bind(f Failable[T]) Result[T] {
 	val, err := f(s.val)
 	if err != nil {
 		return Fail[T](err)
@@ -46,8 +46,8 @@ func (s Success[T]) Bind(f Func0[T]) Result[T] {
 }
 
 // FMap executes the callback function and returns a success with the value changed to the result of the callback
-func (s Success[T]) FMap(f Func1[T]) Result[T] {
-	return Succeed(f(s.val))
+func (s Success[T]) FMap(t Transformable[T]) Result[T] {
+	return Succeed(t(s.val))
 }
 
 // Or returns the success
@@ -86,18 +86,18 @@ func (f Failure[_]) Success() bool {
 }
 
 // Bind returns the Failure
-func (f Failure[T]) Bind(_ Func0[T]) Result[T] {
+func (f Failure[T]) Bind(_ Failable[T]) Result[T] {
 	return f
 }
 
 // FMap returns the original failure
-func (f Failure[T]) FMap(_ Func1[T]) Result[T] {
+func (f Failure[T]) FMap(_ Transformable[T]) Result[T] {
 	return f
 }
 
 // Or executes the callback on the error and returns a new Failure with the result of the error - or the same Failure if error returned is nil
-func (f Failure[T]) Or(fn ErrFunc) Result[T] {
-	fn(f.err)
+func (f Failure[T]) Or(e ErrFunc) Result[T] {
+	e(f.err)
 	return f
 }
 

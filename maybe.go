@@ -6,8 +6,8 @@ type Maybe[T any] interface {
 	Value() T
 	OrElse(T) T
 	Filter(p Predicate[T]) Maybe[T]
-	Bind(Func2[T]) Maybe[T]
-	FMap(Func1[T]) Maybe[T]
+	Bind(Nilable[T]) Maybe[T]
+	FMap(Transformable[T]) Maybe[T]
 }
 
 // Just represents a Maybe monad with a just value
@@ -34,13 +34,13 @@ func (j Just[T]) Filter(p Predicate[T]) Maybe[T] {
 }
 
 // Bind executes a function that returns a nillable object on the value and returns a Maybe
-func (j Just[T]) Bind(f Func2[T]) Maybe[T] {
-	return OfNullable(f(j.val))
+func (j Just[T]) Bind(n Nilable[T]) Maybe[T] {
+	return OfNullable(n(j.val))
 }
 
 // FMap applies a callback to the value
-func (j Just[T]) FMap(f Func1[T]) Maybe[T] {
-	return OfValue(f(j.val))
+func (j Just[T]) FMap(t Transformable[T]) Maybe[T] {
+	return OfValue(t(j.val))
 }
 
 // Nothing represents an empty Maybe of type T
@@ -62,12 +62,12 @@ func (n Nothing[T]) Filter(_ Predicate[T]) Maybe[T] {
 }
 
 // Bind does nothing
-func (n Nothing[T]) Bind(_ Func2[T]) Maybe[T] {
+func (n Nothing[T]) Bind(_ Nilable[T]) Maybe[T] {
 	return n
 }
 
 // FMap does nothing
-func (n Nothing[T]) FMap(_ Func1[T]) Maybe[T] {
+func (n Nothing[T]) FMap(_ Transformable[T]) Maybe[T] {
 	return n
 }
 
