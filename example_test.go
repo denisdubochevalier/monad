@@ -191,6 +191,14 @@ func ExampleResult() {
 	m9 := m2.FMap(func(x int) int { return x * 2 })
 	spew.Printf("m9 := m2.FMap(func(x int) int { return x * 2 }) -> %#v\n", m9)
 
+	spew.Println("\nOr:\n===")
+	m10 := m1.Or(func(err error) error { return err })
+	spew.Printf("m10 := m1.Or(func(err error) error { return err }) -> %#v\n", m10)
+	m11 := m2.Or(func(_ error) error { return nil })
+	spew.Printf("m11 := m2.Or(func(_ error) error { return nil }) -> %#v\n", m11)
+	m12 := m2.Or(func(_ error) error { return errors.New("foo") })
+	spew.Printf("m12 := m2.Or(func(_ error) error { return errors.New(\"foo\") }) -> %#v\n", m12)
+
 	// Output:
 	// Computing example monad.Result values, showing what calling the .Value() and .Error() method on them returns
 	//
@@ -222,4 +230,10 @@ func ExampleResult() {
 	// =====
 	// m8 := m1.FMap(func(x int) int { return x * 2 }) -> (monad.Success[int]){val:(int)2}
 	// m9 := m2.FMap(func(x int) int { return x * 2 }) -> (monad.Failure[int]){err:(*errors.errorString)test}
+	//
+	// Or:
+	// ===
+	// m10 := m1.Or(func(err error) error { return err }) -> (monad.Success[int]){val:(int)1}
+	// m11 := m2.Or(func(_ error) error { return nil }) -> (monad.Failure[int]){err:(*errors.errorString)test}
+	// m12 := m2.Or(func(_ error) error { return errors.New("foo") }) -> (monad.Failure[int]){err:(*errors.errorString)foo}
 }

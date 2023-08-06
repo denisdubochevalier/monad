@@ -8,6 +8,7 @@ type Result[T any] interface {
 	FMap(Func1[T]) Result[T]
 	Failure() bool
 	Success() bool
+	Or(ErrFunc) Result[T]
 }
 
 // Success is the successful return of a failable operation
@@ -49,6 +50,11 @@ func (s Success[_]) Success() bool {
 	return true
 }
 
+// Or returns the success
+func (s Success[T]) Or(_ ErrFunc) Result[T] {
+	return s
+}
+
 // Succeed creates a Success
 func Succeed[T any](val T) Success[T] {
 	return Success[T]{val: val}
@@ -87,6 +93,15 @@ func (f Failure[_]) Failure() bool {
 // Success always returns false for a Failure
 func (f Failure[_]) Success() bool {
 	return false
+}
+
+// Or executes the callback on the error and returns a new Failure with the result of the error - or the same Failure if error returned is nil
+func (f Failure[T]) Or(fn ErrFunc) Result[T] {
+	err := fn(f.err)
+	if err == nil {
+		return f
+	}
+	return Fail[T](err)
 }
 
 // Fail creates a Failure
