@@ -6,6 +6,8 @@ type Maybe[T any] interface {
 	Value() T
 	OrElse(T) T
 	Filter(p Predicate[T]) Maybe[T]
+	Bind(Func2[T]) Maybe[T]
+	FMap(Func1[T]) Maybe[T]
 }
 
 // Just represents a Maybe monad with a just value
@@ -31,6 +33,16 @@ func (j Just[T]) Filter(p Predicate[T]) Maybe[T] {
 	return Nothing[T]{}
 }
 
+// Bind executes a function that returns a nillable object on the value and returns a Maybe
+func (j Just[T]) Bind(f Func2[T]) Maybe[T] {
+	return OfNullable(f(j.val))
+}
+
+// FMap applies a callback to the value
+func (j Just[T]) FMap(f Func1[T]) Maybe[T] {
+	return OfValue(f(j.val))
+}
+
 // Nothing represents an empty Maybe of type T
 type Nothing[T any] struct{}
 
@@ -46,6 +58,16 @@ func (n Nothing[T]) OrElse(x T) T {
 
 // Filter returns nothing
 func (n Nothing[T]) Filter(_ Predicate[T]) Maybe[T] {
+	return n
+}
+
+// Bind does nothing
+func (n Nothing[T]) Bind(_ Func2[T]) Maybe[T] {
+	return n
+}
+
+// FMap does nothing
+func (n Nothing[T]) FMap(_ Func1[T]) Maybe[T] {
 	return n
 }
 
@@ -65,24 +87,4 @@ func OfNullable[T any](x *T) Maybe[T] {
 		return Empty[T]()
 	}
 	return OfValue[T](*x)
-}
-
-// Map applies a Func to a Maybe
-func Map[V, T any](m Maybe[V], f Func[V, T]) Maybe[T] {
-	switch mm := m.(type) {
-	case Just[V]:
-		return Just[T]{
-			val: f(mm.val),
-		}
-	}
-	return Nothing[T]{}
-}
-
-// FlatMap applies a Func returning a Maybe to a Maybe
-func FlatMap[V, T any](m Maybe[V], f Func[V, Maybe[T]]) Maybe[T] {
-	switch mm := m.(type) {
-	case Just[V]:
-		return f(mm.val)
-	}
-	return Nothing[T]{}
 }

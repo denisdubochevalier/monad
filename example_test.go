@@ -2,7 +2,6 @@ package monad_test
 
 import (
 	"errors"
-	"strconv"
 
 	"github.com/davecgh/go-spew/spew"
 
@@ -17,45 +16,25 @@ func ExampleMaybe() {
 	m1 := monad.OfValue(5)
 	spew.Printf("m1 := monad.OfValue(5) -> %#v\n", m1.Value())
 
-	m2 := monad.OfNullable[int](new(int))
+	m2 := monad.OfNullable[int](nil)
 	spew.Printf("m2 := monad.OfNullable[int](new(int)) -> %#v\n", m2.Value())
 
 	m3 := monad.Empty[any]()
 	spew.Printf("m3 := monad.Empty[any]() -> %#v\n", m3.Value())
 
-	spew.Println("\nMap:\n====")
-	m4 := monad.Map(monad.OfValue[int](5), strconv.Itoa)
-	spew.Printf(
-		"m4 := monad.Map(monad.OfValue(5), strconv.Itoa) -> %#v\n",
-		m4.Value(),
-	)
+	spew.Println("\nFMap:\n=====")
+	m4 := m1.FMap(func(x int) int { return x * 2 })
+	spew.Printf("m4 := m1.FMap(func(x int) int { return x * 2 }) -> %#v\n", m4.Value())
+	m5 := m2.FMap(func(x int) int { return x * 2 })
+	spew.Printf("m5 := m2.FMap(func(x int) int { return x * 2 }) -> %#v\n", m5.Value())
 
-	m5 := monad.Map(divideBy(6, 3), func(x int) int { return x * 2 })
-	spew.Printf(
-		"m5 := monad.Map(divideBy(6, 3), func(x int) int { return x * 2 }) -> %#v\n",
-		m5.Value(),
-	)
-
-	m6 := monad.Map(divideBy(6, 0), func(x int) int { return x * 2 })
-	spew.Printf(
-		"m6 := monad.Map(divideBy(6, 0), func(x int) int { return x * 2 }) -> %#v\n",
-		m6.Value(),
-	)
-
-	m7 := monad.FlatMap[int, int](
-		divideBy(6, 0),
-		func(x int) monad.Maybe[int] { return divideBy(0, 7) },
-	)
-	spew.Printf(
-		"m7 := monad.FlatMap[int, int](divideBy(6, 0), func(x int) monad.Maybe[int] { return divideBy(0, 7) }) -> %#v\n",
-		m7.Value(),
-	)
-
-	m8 := monad.FlatMap(divideBy(6, 5), func(x int) monad.Maybe[int] { return divideBy(5, 3) })
-	spew.Printf(
-		"m8 := monad.FlatMap(divideBy(6, 5), func(x int) monad.Maybe[int] { return divideBy(5, 3) }) -> %#v\n",
-		m8.Value(),
-	)
+	spew.Println("\nBind:\n=====")
+	m6 := m1.Bind(func(x int) *int { x = x * 2; return &x })
+	spew.Printf("m6 := m1.Bind(func(x int) *int { x = x * 2; return &x }) -> %#v\n", m6.Value())
+	m7 := m1.Bind(func(x int) *int { return nil })
+	spew.Printf("m7 := m1.Bind(func(x int) *int { return nil }) -> %#v\n", m7.Value())
+	m8 := m2.Bind(func(x int) *int { x = x * 2; return &x })
+	spew.Printf("m8 := m2.Bind(func(x int) *int { x = x * 2; return &x }) -> %#v\n", m8.Value())
 
 	spew.Println("\nFilter:\n=======")
 	m9 := monad.OfValue(5).Filter(func(x int) bool { return x%2 == 0 })
@@ -97,13 +76,16 @@ func ExampleMaybe() {
 	// m2 := monad.OfNullable[int](new(int)) -> (int)0
 	// m3 := monad.Empty[any]() -> (interface {})<nil>
 	//
-	// Map:
-	// ====
-	// m4 := monad.Map(monad.OfValue(5), strconv.Itoa) -> (string)5
-	// m5 := monad.Map(divideBy(6, 3), func(x int) int { return x * 2 }) -> (int)4
-	// m6 := monad.Map(divideBy(6, 0), func(x int) int { return x * 2 }) -> (int)0
-	// m7 := monad.FlatMap[int, int](divideBy(6, 0), func(x int) monad.Maybe[int] { return divideBy(0, 7) }) -> (int)0
-	// m8 := monad.FlatMap(divideBy(6, 5), func(x int) monad.Maybe[int] { return divideBy(5, 3) }) -> (int)1
+	// FMap:
+	// =====
+	// m4 := m1.FMap(func(x int) int { return x * 2 }) -> (int)10
+	// m5 := m2.FMap(func(x int) int { return x * 2 }) -> (int)0
+	//
+	// Bind:
+	// =====
+	// m6 := m1.Bind(func(x int) *int { x = x * 2; return &x }) -> (int)10
+	// m7 := m1.Bind(func(x int) *int { return nil }) -> (int)0
+	// m8 := m2.Bind(func(x int) *int { x = x * 2; return &x }) -> (int)0
 	//
 	// Filter:
 	// =======
