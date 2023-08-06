@@ -8,3 +8,6 @@ type Func[V, T any] func(V) T
 
 // Func0 represents a function that takes a value of type T and returns another value of the same type and an error
 type Func0[T any] func(T) (T, error)
+
+// Func1 represents a function that takes a value of type T and returns another value of the same type
+type Func1[T any] func(T) T

@@ -5,6 +5,7 @@ type Result[T any] interface {
 	Error() error
 	Value() T
 	Bind(Func0[T]) Result[T]
+	FMap(Func1[T]) Result[T]
 	Failure() bool
 	Success() bool
 }
@@ -31,6 +32,11 @@ func (s Success[T]) Bind(f Func0[T]) Result[T] {
 		return Fail[T](err)
 	}
 	return Succeed(val)
+}
+
+// FMap executes the callback function and returns a success with the value changed to the result of the callback
+func (s Success[T]) FMap(f Func1[T]) Result[T] {
+	return Succeed(f(s.val))
 }
 
 // Failure always return false for a Success
@@ -65,6 +71,11 @@ func (f Failure[T]) Value() T {
 
 // Bind returns the Failure
 func (f Failure[T]) Bind(_ Func0[T]) Result[T] {
+	return f
+}
+
+// FMap returns the original failure
+func (f Failure[T]) FMap(_ Func1[T]) Result[T] {
 	return f
 }
 

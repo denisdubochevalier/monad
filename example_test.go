@@ -185,6 +185,12 @@ func ExampleResult() {
 		m7.Error(),
 	)
 
+	spew.Println("\nFMap:\n=====")
+	m8 := m1.FMap(func(x int) int { return x * 2 })
+	spew.Printf("m8 := m1.FMap(func(x int) int { return x * 2 }) -> %#v\n", m8)
+	m9 := m2.FMap(func(x int) int { return x * 2 })
+	spew.Printf("m9 := m2.FMap(func(x int) int { return x * 2 }) -> %#v\n", m9)
+
 	// Output:
 	// Computing example monad.Result values, showing what calling the .Value() and .Error() method on them returns
 	//
@@ -211,4 +217,9 @@ func ExampleResult() {
 	// m6 := m5.Bind(func(_ int) (int, error) { return 0, errors.New("test") }) -> Error: (*errors.errorString)test
 	// m7 := m2.Bind(func(x int) (int, error) { return x * 2, nil }) -> Value: (int)0
 	// m7 := m2.Bind(func(x int) (int, error) { return x * 2, nil }) -> Error: (*errors.errorString)test
+	//
+	// FMap:
+	// =====
+	// m8 := m1.FMap(func(x int) int { return x * 2 }) -> (monad.Success[int]){val:(int)2}
+	// m9 := m2.FMap(func(x int) int { return x * 2 }) -> (monad.Failure[int]){err:(*errors.errorString)test}
 }
