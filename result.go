@@ -6,6 +6,7 @@ type Result[T any] interface {
 	Value() T
 	Failure() bool
 	Success() bool
+	FBind(func(T) Result[T]) Result[T]
 	Bind(Failable[T]) Result[T]
 	FMap(Transformable[T]) Result[T]
 	Or(ErrorHandler) Result[T]
@@ -34,6 +35,11 @@ func (s Success[_]) Failure() bool {
 // Success always return true for a Success
 func (s Success[_]) Success() bool {
 	return true
+}
+
+// FBind executes the function on the underlying success and returns its Result response
+func (s Success[T]) FBind(f func(T) Result[T]) Result[T] {
+	return f(s.val)
 }
 
 // Bind executes the callback function and returns a Result object
@@ -83,6 +89,11 @@ func (f Failure[_]) Failure() bool {
 // Success always returns false for a Failure
 func (f Failure[_]) Success() bool {
 	return false
+}
+
+// FBind returns the current failure
+func (f Failure[T]) FBind(_ func(T) Result[T]) Result[T] {
+	return f
 }
 
 // Bind returns the Failure

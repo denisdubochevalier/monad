@@ -80,6 +80,17 @@ func ExampleResult() {
 	m11 := m2.Or(func(_ error) {})
 	spew.Printf("m11 := m2.Or(func(_ error) {}) -> %#v\n", m11)
 
+	spew.Println("\nFBind:\n======")
+	m12 := m1.FBind(func(x int) monad.Result[int] { return monad.Succeed(x * 2) })
+	spew.Printf(
+		"m12 := m1.FBind(func(x int) monad.Result[int] { return monad.Succeed(x * 2) }) -> %#v\n",
+		m12,
+	)
+	m13 := m2.FBind(func(x int) monad.Result[int] { return monad.Succeed(x * 2) })
+	spew.Printf(
+		"m13 := m2.FBind(func(x int) monad.Result[int] { return monad.Succeed(x * 2) }) -> %#v\n",
+		m13,
+	)
 	// Output:
 	// Computing example monad.Result values, showing what calling the .Value() and .Error() method on them returns
 	//
@@ -116,4 +127,9 @@ func ExampleResult() {
 	// ===
 	// m10 := m1.Or(func(_ error) {}) -> (monad.Success[int]){val:(int)1}
 	// m11 := m2.Or(func(_ error) {}) -> (monad.Failure[int]){err:(*errors.errorString)test}
+	//
+	// FBind:
+	// ======
+	// m12 := m1.FBind(func(x int) monad.Result[int] { return monad.Succeed(x * 2) }) -> (monad.Success[int]){val:(int)2}
+	// m13 := m2.FBind(func(x int) monad.Result[int] { return monad.Succeed(x * 2) }) -> (monad.Failure[int]){err:(*errors.errorString)test}
 }
