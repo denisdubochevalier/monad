@@ -12,5 +12,5 @@ type Transformable[T any] func(T) T
 // Nilable represents a function that takes a value of type T and returns a nullable of type T
 type Nilable[T any] func(T) *T
 
-// ErrFunc represents a function that handles an error
-type ErrFunc func(error)
+// ErrorHandler represents a function that handles an error
+type ErrorHandler func(error)
