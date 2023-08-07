@@ -65,6 +65,18 @@ func ExampleMaybe() {
 	v2 := monad.None[int]().OrElse(2)
 	spew.Printf("v2 := monad.None[int]().OrElse(2) -> %#v\n", v2)
 
+	spew.Println("\nFBind:\n======")
+	m13 := m1.FBind(func(x int) monad.Maybe[int] { return monad.Some(x * 2) })
+	spew.Printf(
+		"m13 := m1.FBind(func(x int) monad.Maybe[int] { return monad.Some(x * 2) }) -> %#v\n",
+		m13,
+	)
+	m14 := monad.None[int]().FBind(func(x int) monad.Maybe[int] { return monad.Some(x * 2) })
+	spew.Printf(
+		"m14 := monad.None[int]().FBind(func(x int) monad.Maybe[int] { return monad.Some(x * 2) }) -> %#v\n",
+		m14,
+	)
+
 	// Output:
 	// Computing example monad.Maybe values, showing what calling the .Value() method on them returns:
 	//
@@ -96,4 +108,9 @@ func ExampleMaybe() {
 	// =======
 	// v1 := monad.Some(1).OrElse(2) -> (int)1
 	// v2 := monad.None[int]().OrElse(2) -> (int)2
+	//
+	// FBind:
+	// ======
+	// m13 := m1.FBind(func(x int) monad.Maybe[int] { return monad.Some(x * 2) }) -> (monad.Just[int]){val:(int)10}
+	// m14 := monad.None[int]().FBind(func(x int) monad.Maybe[int] { return monad.Some(x * 2) }) -> (monad.Nothing[int]){}
 }
