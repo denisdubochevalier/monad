@@ -56,7 +56,7 @@ func (s Success[T]) Or(_ ErrorHandler) Result[T] {
 }
 
 // Succeed creates a Success
-func Succeed[T any](val T) Success[T] {
+func Succeed[T any](val T) Result[T] {
 	return Success[T]{val: val}
 }
 
@@ -102,7 +102,7 @@ func (f Failure[T]) Or(e ErrorHandler) Result[T] {
 }
 
 // Fail creates a Failure
-func Fail[T any](err error) Failure[T] {
+func Fail[T any](err error) Result[T] {
 	return Failure[T]{err: err}
 }
 
