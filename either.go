@@ -15,6 +15,13 @@ type Left[T any] struct {
 	val T
 }
 
+// NewLVal creates a Left value.
+func NewLVal[T any](t T) Left[T] {
+	return Left[T]{
+		val: t,
+	}
+}
+
 // Value gets the underlying value.
 func (l Left[T]) Value() T {
 	return l.val
@@ -43,6 +50,13 @@ func (l Left[T]) Or(f func(T) Either[T]) Either[T] {
 // Right represents a right value.
 type Right[T any] struct {
 	val T
+}
+
+// NewRVal creates a Right value.
+func NewRVal[T any](t T) Right[T] {
+	return Right[T]{
+		val: t,
+	}
 }
 
 // Value gets the underlying value.
