@@ -13,4 +13,4 @@ type Transformable[T any] func(T) T
 type Nilable[T any] func(T) *T
 
 // ErrorHandler represents a function that handles an error
-type ErrorHandler func(error)
+type ErrorHandler func(error) Result
