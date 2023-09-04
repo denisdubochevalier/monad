@@ -57,7 +57,7 @@ func (s Success[T]) FMap(t Transformable[T]) Result[T] {
 }
 
 // Or returns the success
-func (s Success[T]) Or(_ ErrorHandler) Result[T] {
+func (s Success[T]) Or(_ ErrorHandler[T]) Result[T] {
 	return s
 }
 
@@ -107,7 +107,7 @@ func (f Failure[T]) FMap(_ Transformable[T]) Result[T] {
 }
 
 // Or executes the callback on the error and returns a new Failure with the result of the error - or the same Failure if error returned is nil
-func (f Failure[T]) Or(e ErrorHandler) Result[T] {
+func (f Failure[T]) Or(e ErrorHandler[T]) Result[T] {
 	e(f.err)
 	return f
 }
