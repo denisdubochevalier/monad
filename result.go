@@ -9,7 +9,7 @@ type Result[T any] interface {
 	FBind(func(T) Result[T]) Result[T]
 	Bind(Failable[T]) Result[T]
 	FMap(Transformable[T]) Result[T]
-	Or(ErrorHandler) Result[T]
+	Or(ErrorHandler[T]) Result[T]
 }
 
 // Success is the successful return of a failable operation
