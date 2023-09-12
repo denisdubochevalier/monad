@@ -27,12 +27,12 @@
 //     logging or state tracing.
 //   - State: Allows the embedding of stateful computations within the monadic
 //     structure.
+//   - Validation Monad: To accumulate all errors rather than failing fast,
+//     useful in form validation.
 //
 // Upcoming Monads:
 //   - Continuation Monad: Suited for asynchronous or nested computations.
 //   - IO Monad: To encapsulate effectful computations in a functional style.
-//   - Validation Monad: To accumulate all errors rather than failing fast,
-//     useful in form validation.
 //   - Future/Promise Monad: An academic endeavor given Go's native concurrency
 //     model.
 //   - Free Monad: An advanced construct to build interpreters for embedded
