@@ -32,10 +32,40 @@
 //   - Continuation: Suited for asynchronous or nested computations.
 //   - IO Monad: To encapsulate effectful computations in a functional style.
 //   - Future: To encapsulate future asynchronous computations.
-//
-// Upcoming Monads:
 //   - Free Monad: An advanced construct to build interpreters for embedded
 //     DSLs.
+//
+// Planned monads:
+//   - RWS (Reader-Writer-State) Monad: An amalgam of the Reader, Writer, and
+//     State monads, this monad is particularly useful when you need to carry an
+//     environment, write logs, and maintain state all in one.
+//   - Promise Monad: Similar to the Future Monad but offers more flexibility in
+//     terms of chaining asynchronous operations and handling failures.
+//   - Try Monad: A derivative of the Either Monad that's specialized for
+//     capturing exceptions, making it easier to interface with code that might
+//     throw exceptions rather than return explicit error values.
+//   - Logic Monad: Useful for computations that involve non-determinism or
+//     search, akin to logic programming in languages like Prolog.
+//   - Event Monad: Aimed at event-driven architectures, this could encapsulate
+//     event sources as monadic values, allowing you to manipulate and combine
+//     them functionally.
+//   - Transaction Monad: Useful for operations that could be rolled back,
+//     allowing you to capture the essence of transactions in a functional
+//     context.
+//   - Parser Combinators as Monads: While not a singular monad, parser
+//     combinators often make extensive use of monadic interfaces to create
+//     highly compositional parsing strategies.
+//   - Probabilistic Monad: For stochastic or probabilistic computations, allows
+//     you to build up complex models while maintaining the ability to extract
+//     probability distributions.
+//   - Co-Routine Monad: Provides a way to encapsulate generators and other
+//     co-routines in a functional way.
+//   - Lens Monad: Though lenses are more commonly associated with functional
+//     programming languages like Haskell, a Lens monad could offer a similar
+//     capability of focusing on and manipulating nested immutable data
+//     structures in a clean way.
+//   - Process Monad: For encapsulating potentially long-running, stateful
+//     processes that might be paused, resumed, or terminated.
 //
 // Each monad is endowed with functional methods like `FlatMap` and `Map` to
 // facilitate composability and side-effect management.
