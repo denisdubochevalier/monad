@@ -8,6 +8,3 @@ type Failable[T any] func(T) (T, error)
 
 // Nilable represents a function that takes a value of type T and returns a nullable of type T
 type Nilable[T any] func(T) *T
-
-// ErrorHandler represents a function that handles an error
-type ErrorHandler[T any] func(error) Result[T]
