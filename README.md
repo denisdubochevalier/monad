@@ -9,7 +9,6 @@
 [![Coverage](https://img.shields.io/codecov/c/github/denisdubochevalier/monad)](https://codecov.io/gh/denisdubochevalier/monad)
 [![License](https://img.shields.io/github/license/denisdubochevalier/monad)](./LICENSE)
 
-A Toy Go library to implement some Monadic concepts
+A Go library to implement some Monadic concepts
 
-**Warning** This is only a toy project for me, and is still in its early stage.
-Use it at your own risks.
+**Warning** This is still in its early stage. Use it at your own risks.
