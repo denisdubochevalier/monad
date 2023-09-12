@@ -30,17 +30,17 @@ package serves as a bedrock for complex, side-effect-free computations.
 
 ## Planned Additions
 
-- [] RWS (Reader-Writer-State) Monad
-- [] Promise Monad
-- [] Try Monad
-- [] Logic Monad
-- [] Event Monad
-- [] Transaction Monad
-- [] Parser Combinators as Monads
-- [] Probabilistic Monad
-- [] Co-Routine Monad
-- [] Lens Monad
-- [] Process Monad
+- [ ] RWS (Reader-Writer-State) Monad
+- [ ] Promise Monad
+- [ ] Try Monad
+- [ ] Logic Monad
+- [ ] Event Monad
+- [ ] Transaction Monad
+- [ ] Parser Combinators as Monads
+- [ ] Probabilistic Monad
+- [ ] Co-Routine Monad
+- [ ] Lens Monad
+- [ ] Process Monad
 
 ## Installation
 
