@@ -4,7 +4,6 @@
 [![GoDoc](https://godoc.org/github.com/denisdubochevalier/monad?status.svg)](https://pkg.go.dev/github.com/denisdubochevalier/monad)
 ![Build Status](https://github.com/denisdubochevalier/monad/actions/workflows/go.yml/badge.svg)
 ![Lint Status](https://github.com/denisdubochevalier/monad/actions/workflows/golangci-lint.yml/badge.svg)
-![CodeQL Status](https://github.com/denisdubochevalier/monad/actions/workflows/codeql.yml/badge.svg)
 [![Go report](https://goreportcard.com/badge/github.com/denisdubochevalier/monad)](https://goreportcard.com/report/github.com/denisdubochevalier/monad)
 [![Coverage](https://img.shields.io/codecov/c/github/denisdubochevalier/monad)](https://codecov.io/gh/denisdubochevalier/monad)
 [![License](https://img.shields.io/github/license/denisdubochevalier/monad)](./LICENSE)
