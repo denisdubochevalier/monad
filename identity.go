@@ -12,27 +12,27 @@ type Identity[T any] interface {
 	FlatMap(func(T) Identity[T]) Identity[T]
 }
 
-// Identityful is a concrete implementation of the Identity interface.
-type Identityful[T any] struct {
+// identity is a concrete implementation of the Identity interface.
+type identity[T any] struct {
 	value T // The encapsulated value
 }
 
 // NewIdentity constructs a new Identity monad with an initial value.
 func NewIdentity[T any](value T) Identity[T] {
-	return Identityful[T]{value: value}
+	return identity[T]{value: value}
 }
 
 // Value returns the encapsulated value.
-func (i Identityful[T]) Value() T {
+func (i identity[T]) Value() T {
 	return i.value
 }
 
 // Map applies a function to the encapsulated value and returns a new Identity.
-func (i Identityful[T]) Map(f func(T) any) Identity[any] {
+func (i identity[T]) Map(f func(T) any) Identity[any] {
 	return NewIdentity(f(i.value))
 }
 
 // FlatMap applies a function that returns a new Identity and returns it.
-func (i Identityful[T]) FlatMap(f func(T) Identity[T]) Identity[T] {
+func (i identity[T]) FlatMap(f func(T) Identity[T]) Identity[T] {
 	return f(i.value)
 }

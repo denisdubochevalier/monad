@@ -21,7 +21,7 @@ func TestMaybeLeftIdentityLaw(t *testing.T) {
 	is.Equal(Some(a).FlatMap(f).Value(), f(a).Value())
 
 	// Test for Nothing
-	is.Equal(None[int]().FlatMap(f).IsNothing(), None[int]().IsNothing())
+	is.Equal(None[int]().FlatMap(f).Nothing(), None[int]().Nothing())
 }
 
 func TestMaybeRightIdentityLaw(t *testing.T) {
@@ -39,7 +39,7 @@ func TestMaybeRightIdentityLaw(t *testing.T) {
 	is.Equal(m.FlatMap(Some).Value(), m.Value())
 
 	// Test for Nothing
-	is.Equal(None[int]().FlatMap(Some).IsNothing(), None[int]().IsNothing())
+	is.Equal(None[int]().FlatMap(Some).Nothing(), None[int]().Nothing())
 }
 
 func TestMaybeAssociativityLaw(t *testing.T) {
@@ -71,10 +71,10 @@ func TestMaybeAssociativityLaw(t *testing.T) {
 	m = None[int]()
 	leftHandSide = m.FlatMap(f).FlatMap(g)
 	rightHandSide = m.FlatMap(func(x int) Maybe[int] { return f(x).FlatMap(g) })
-	is.Equal(leftHandSide.IsNothing(), rightHandSide.IsNothing())
+	is.Equal(leftHandSide.Nothing(), rightHandSide.Nothing())
 }
 
-// Additional tests for methods like OrElse, IsJust, IsNothing etc.
+// Additional tests for methods like OrElse, Just, Nothing etc.
 func TestMaybeMethods(t *testing.T) {
 	t.Parallel()
 	is := require.New(t)
@@ -82,11 +82,11 @@ func TestMaybeMethods(t *testing.T) {
 	just := Some(5)
 	nothing := None[int]()
 
-	// Test IsJust and IsNothing
-	is.True(just.IsJust())
-	is.False(just.IsNothing())
-	is.False(nothing.IsJust())
-	is.True(nothing.IsNothing())
+	// Test Just and Nothing
+	is.True(just.Just())
+	is.False(just.Nothing())
+	is.False(nothing.Just())
+	is.True(nothing.Nothing())
 
 	// Test OrElse
 	is.Equal(5, just.OrElse(10))

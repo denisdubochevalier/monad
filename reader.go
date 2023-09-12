@@ -13,25 +13,25 @@ type Reader[E, T any] interface {
 	FlatMap(func(T) Reader[E, T]) Reader[E, T]
 }
 
-// Readerful is a concrete implementation of the Reader interface.
+// reader is a concrete implementation of the Reader interface.
 // It holds a function that defines the computation to be run with an environment.
-type Readerful[E, T any] struct {
+type reader[E, T any] struct {
 	computation func(E) T
 }
 
 // NewReader constructs a new Reader monad given a computation function.
 func NewReader[E, T any](computation func(E) T) Reader[E, T] {
-	return Readerful[E, T]{computation: computation}
+	return reader[E, T]{computation: computation}
 }
 
 // Run executes the Reader computation with the provided environment and returns the resulting value.
-func (r Readerful[E, T]) Run(env E) T {
+func (r reader[E, T]) Run(env E) T {
 	return r.computation(env)
 }
 
 // Map applies a given function to transform the Reader's result into a new type.
 // It returns a new Reader that wraps the new computation.
-func (r Readerful[E, T]) Map(f func(T) any) Reader[E, any] {
+func (r reader[E, T]) Map(f func(T) any) Reader[E, any] {
 	return NewReader[E, any](func(env E) any {
 		return f(r.Run(env))
 	})
@@ -39,7 +39,7 @@ func (r Readerful[E, T]) Map(f func(T) any) Reader[E, any] {
 
 // FlatMap applies a given function that returns a new Reader monad.
 // It returns a new Reader that wraps the combined computation.
-func (r Readerful[E, T]) FlatMap(f func(T) Reader[E, T]) Reader[E, T] {
+func (r reader[E, T]) FlatMap(f func(T) Reader[E, T]) Reader[E, T] {
 	return NewReader[E, T](func(env E) T {
 		newReader := f(r.Run(env))
 		return newReader.Run(env)

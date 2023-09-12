@@ -15,23 +15,23 @@ type List[T any] interface {
 	FlatMap(func(T) List[T]) List[T]
 }
 
-// Listful is a concrete implementation of the List interface.
-type Listful[T any] struct {
+// list is a concrete implementation of the List interface.
+type list[T any] struct {
 	values []T
 }
 
 // NewList creates a new List given a slice of initial values.
 func NewList[T any](values []T) List[T] {
-	return Listful[T]{values: values}
+	return list[T]{values: values}
 }
 
-// Values retrieves the encapsulated slice from a Listful.
-func (l Listful[T]) Values() []T {
+// Values retrieves the encapsulated slice from a list.
+func (l list[T]) Values() []T {
 	return l.values
 }
 
-// Map applies a transformation to each element in the Listful and returns a new List.
-func (l Listful[T]) Map(f func(T) any) List[any] {
+// Map applies a transformation to each element in the list and returns a new List.
+func (l list[T]) Map(f func(T) any) List[any] {
 	var newValues []any
 	for _, v := range l.values {
 		newValues = append(newValues, f(v))
@@ -39,8 +39,8 @@ func (l Listful[T]) Map(f func(T) any) List[any] {
 	return NewList[any](newValues)
 }
 
-// FlatMap transforms each element in the Listful to a new List and flattens the result.
-func (l Listful[T]) FlatMap(f func(T) List[T]) List[T] {
+// FlatMap transforms each element in the list to a new List and flattens the result.
+func (l list[T]) FlatMap(f func(T) List[T]) List[T] {
 	var newValues []T
 	for _, v := range l.values {
 		newValues = append(newValues, f(v).Values()...)
