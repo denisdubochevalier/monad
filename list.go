@@ -43,9 +43,7 @@ func (l Listful[T]) Map(f func(T) any) List[any] {
 func (l Listful[T]) FlatMap(f func(T) List[T]) List[T] {
 	var newValues []T
 	for _, v := range l.values {
-		for _, w := range f(v).Values() {
-			newValues = append(newValues, w)
-		}
+		newValues = append(newValues, f(v).Values()...)
 	}
 	return NewList[T](newValues)
 }
