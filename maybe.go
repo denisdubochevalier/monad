@@ -1,4 +1,3 @@
-// Package monad implements a simple Maybe monad in go
 package monad
 
 // Maybe is a Monad that allows a value to be either Just or Nothing
