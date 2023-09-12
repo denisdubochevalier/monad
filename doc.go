@@ -30,11 +30,10 @@
 //   - Validation: To accumulate all errors rather than failing fast,
 //     useful in form validation.
 //   - Continuation: Suited for asynchronous or nested computations.
+//   - IO Monad: To encapsulate effectful computations in a functional style.
+//   - Future: To encapsulate future asynchronous computations.
 //
 // Upcoming Monads:
-//   - IO Monad: To encapsulate effectful computations in a functional style.
-//   - Future/Promise Monad: An academic endeavor given Go's native concurrency
-//     model.
 //   - Free Monad: An advanced construct to build interpreters for embedded
 //     DSLs.
 //
