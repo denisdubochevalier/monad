@@ -6,9 +6,7 @@ type Result[T any] interface {
 	Value() T
 	Failure() bool
 	Success() bool
-	FBind(func(T) Result[T]) Result[T]
-	Bind(Failable[T]) Result[T]
-	FMap(Transformable[T]) Result[T]
+	FMap(func(T) Result[T]) Result[T]
 	Or(ErrorHandler[T]) Result[T]
 }
 
@@ -37,23 +35,9 @@ func (s Success[_]) Success() bool {
 	return true
 }
 
-// FBind executes the function on the underlying success and returns its Result response
-func (s Success[T]) FBind(f func(T) Result[T]) Result[T] {
-	return f(s.val)
-}
-
-// Bind executes the callback function and returns a Result object
-func (s Success[T]) Bind(f Failable[T]) Result[T] {
-	val, err := f(s.val)
-	if err != nil {
-		return Fail[T](err)
-	}
-	return Succeed(val)
-}
-
 // FMap executes the callback function and returns a success with the value changed to the result of the callback
-func (s Success[T]) FMap(t Transformable[T]) Result[T] {
-	return Succeed(t(s.val))
+func (s Success[T]) FMap(t func(T) Result[T]) Result[T] {
+	return t(s.val)
 }
 
 // Or returns the success
@@ -91,18 +75,8 @@ func (f Failure[_]) Success() bool {
 	return false
 }
 
-// FBind returns the current failure
-func (f Failure[T]) FBind(_ func(T) Result[T]) Result[T] {
-	return f
-}
-
-// Bind returns the Failure
-func (f Failure[T]) Bind(_ Failable[T]) Result[T] {
-	return f
-}
-
 // FMap returns the original failure
-func (f Failure[T]) FMap(_ Transformable[T]) Result[T] {
+func (f Failure[T]) FMap(_ func(T) Result[T]) Result[T] {
 	return f
 }
 
