@@ -16,7 +16,7 @@ type Left[T any] struct {
 }
 
 // NewLVal creates a Left value.
-func NewLVal[T any](t T) Left[T] {
+func NewLVal[T any](t T) Either[T] {
 	return Left[T]{
 		val: t,
 	}
@@ -53,7 +53,7 @@ type Right[T any] struct {
 }
 
 // NewRVal creates a Right value.
-func NewRVal[T any](t T) Right[T] {
+func NewRVal[T any](t T) Either[T] {
 	return Right[T]{
 		val: t,
 	}
