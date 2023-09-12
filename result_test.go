@@ -15,11 +15,11 @@ func TestResultLeftIdentityLaw(t *testing.T) {
 	a := 3
 
 	// Test for Success
-	is.Equal(Succeed(a).FMap(f).Value(), f(a).Value())
+	is.Equal(Succeed(a).FlatMap(f).Value(), f(a).Value())
 
 	// Test for Failure
 	is.Equal(
-		Fail[int](errors.New("test")).FMap(f).Failure(),
+		Fail[int](errors.New("test")).FlatMap(f).Failure(),
 		Fail[int](errors.New("test")).Failure(),
 	)
 }
@@ -31,11 +31,11 @@ func TestResultRightIdentityLaw(t *testing.T) {
 	m := Succeed(3)
 
 	// Test for Success
-	is.Equal(m.FMap(Succeed).Value(), m.Value())
+	is.Equal(m.FlatMap(Succeed).Value(), m.Value())
 
 	// Test for Failure
 	m = Fail[int](errors.New("test"))
-	is.Equal(m.FMap(Succeed).Failure(), m.Failure())
+	is.Equal(m.FlatMap(Succeed).Failure(), m.Failure())
 }
 
 func TestResultAssociativityLaw(t *testing.T) {
@@ -47,13 +47,13 @@ func TestResultAssociativityLaw(t *testing.T) {
 	g := func(x int) Result[int] { return Succeed(x * 2) }
 
 	// Test for Success
-	leftHandSide := m.FMap(f).FMap(g)
-	rightHandSide := m.FMap(func(x int) Result[int] { return f(x).FMap(g) })
+	leftHandSide := m.FlatMap(f).FlatMap(g)
+	rightHandSide := m.FlatMap(func(x int) Result[int] { return f(x).FlatMap(g) })
 	is.Equal(leftHandSide.Value(), rightHandSide.Value())
 
 	// Test for Failure
 	m = Fail[int](errors.New("test"))
-	leftHandSide = m.FMap(f).FMap(g)
-	rightHandSide = m.FMap(func(x int) Result[int] { return f(x).FMap(g) })
+	leftHandSide = m.FlatMap(f).FlatMap(g)
+	rightHandSide = m.FlatMap(func(x int) Result[int] { return f(x).FlatMap(g) })
 	is.Equal(leftHandSide.Failure(), rightHandSide.Failure())
 }

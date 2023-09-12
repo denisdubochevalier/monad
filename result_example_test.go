@@ -35,15 +35,15 @@ func ExampleResult() {
 	spew.Printf("m4 := monad.FromTuple(1, errors.New(\"test\")) -> Value: %#v\n", m4.Value())
 	spew.Printf("m4 := monad.FromTuple(1, errors.New(\"test\")) -> Error: %#v\n", m4.Error())
 
-	spew.Println("\nFMap:\n=====")
-	m8 := m1.FMap(func(x int) monad.Result[int] { return monad.Succeed(x * 2) })
+	spew.Println("\nFlatMap:\n=====")
+	m8 := m1.FlatMap(func(x int) monad.Result[int] { return monad.Succeed(x * 2) })
 	spew.Printf(
-		"m8 := m1.FMap(func(x int) monad.Result[int] { return monad.Succeed(x * 2) }) -> %#v\n",
+		"m8 := m1.FlatMap(func(x int) monad.Result[int] { return monad.Succeed(x * 2) }) -> %#v\n",
 		m8,
 	)
-	m9 := m2.FMap(func(x int) monad.Result[int] { return monad.Succeed(x * 2) })
+	m9 := m2.FlatMap(func(x int) monad.Result[int] { return monad.Succeed(x * 2) })
 	spew.Printf(
-		"m9 := m2.FMap(func(x int) monad.Result[int] { return monad.Succeed(x * 2) }) -> %#v\n",
+		"m9 := m2.FlatMap(func(x int) monad.Result[int] { return monad.Succeed(x * 2) }) -> %#v\n",
 		m9,
 	)
 
@@ -71,10 +71,10 @@ func ExampleResult() {
 	// m4 := monad.FromTuple(1, errors.New("test")) -> Value: (int)0
 	// m4 := monad.FromTuple(1, errors.New("test")) -> Error: (*errors.errorString)test
 	//
-	// FMap:
+	// FlatMap:
 	// =====
-	// m8 := m1.FMap(func(x int) monad.Result[int] { return monad.Succeed(x * 2) }) -> (monad.Success[int]){val:(int)2}
-	// m9 := m2.FMap(func(x int) monad.Result[int] { return monad.Succeed(x * 2) }) -> (monad.Failure[int]){err:(*errors.errorString)test}
+	// m8 := m1.FlatMap(func(x int) monad.Result[int] { return monad.Succeed(x * 2) }) -> (monad.Success[int]){val:(int)2}
+	// m9 := m2.FlatMap(func(x int) monad.Result[int] { return monad.Succeed(x * 2) }) -> (monad.Failure[int]){err:(*errors.errorString)test}
 	//
 	// Or:
 	// ===

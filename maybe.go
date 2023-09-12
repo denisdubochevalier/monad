@@ -7,7 +7,8 @@ type Maybe[T any] interface {
 	Value() T
 	OrElse(T) T
 	Filter(p Predicate[T]) Maybe[T]
-	FMap(func(T) Maybe[T]) Maybe[T]
+	Map(func(T) Maybe[any]) Maybe[any]
+	FlatMap(func(T) Maybe[T]) Maybe[T]
 }
 
 // Just represents a Maybe monad with a just value
@@ -43,9 +44,14 @@ func (j Just[T]) Filter(p Predicate[T]) Maybe[T] {
 	return None[T]()
 }
 
-// FMap applies a callback to the value
-func (j Just[T]) FMap(t func(T) Maybe[T]) Maybe[T] {
-	return t(j.val)
+// Map applies a callback to the value and returns a Maybe[any]
+func (j Just[T]) Map(f func(T) Maybe[any]) Maybe[any] {
+	return f(j.val)
+}
+
+// FlatMap applies a callback to the value
+func (j Just[T]) FlatMap(f func(T) Maybe[T]) Maybe[T] {
+	return f(j.val)
 }
 
 // Nothing represents an empty Maybe of type T
@@ -76,8 +82,13 @@ func (n Nothing[T]) Filter(_ Predicate[T]) Maybe[T] {
 	return n
 }
 
-// FMap does nothing
-func (n Nothing[T]) FMap(_ func(T) Maybe[T]) Maybe[T] {
+// Map does nothing
+func (n Nothing[T]) Map(_ func(T) Maybe[any]) Maybe[any] {
+	return Nothing[any](n)
+}
+
+// FlatMap does nothing
+func (n Nothing[T]) FlatMap(_ func(T) Maybe[T]) Maybe[T] {
 	return n
 }
 

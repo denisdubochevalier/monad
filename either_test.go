@@ -14,10 +14,10 @@ func TestEitherLeftIdentityLaw(t *testing.T) {
 	a := 3
 
 	// Test for Right
-	is.Equal(NewRVal(a).FMap(f).Value(), f(a).Value())
+	is.Equal(NewRVal(a).FlatMap(f).Value(), f(a).Value())
 
 	// Test for Left
-	is.Equal(NewLVal(a).FMap(f).Left(), NewLVal(a).Left())
+	is.Equal(NewLVal(a).FlatMap(f).Left(), NewLVal(a).Left())
 }
 
 func TestEitherRightIdentityLaw(t *testing.T) {
@@ -27,11 +27,11 @@ func TestEitherRightIdentityLaw(t *testing.T) {
 	m := NewRVal(3)
 
 	// Test for Right
-	is.Equal(m.FMap(NewRVal).Value(), m.Value())
+	is.Equal(m.FlatMap(NewRVal).Value(), m.Value())
 
 	// Test for Left
 	m = NewLVal(3)
-	is.Equal(m.FMap(NewRVal).Left(), m.Left())
+	is.Equal(m.FlatMap(NewRVal).Left(), m.Left())
 }
 
 func TestEitherAssociativityLaw(t *testing.T) {
@@ -43,13 +43,13 @@ func TestEitherAssociativityLaw(t *testing.T) {
 	g := func(x int) Either[int] { return NewRVal(x * 2) }
 
 	// Test for Right
-	leftHandSide := m.FMap(f).FMap(g)
-	rightHandSide := m.FMap(func(x int) Either[int] { return f(x).FMap(g) })
+	leftHandSide := m.FlatMap(f).FlatMap(g)
+	rightHandSide := m.FlatMap(func(x int) Either[int] { return f(x).FlatMap(g) })
 	is.Equal(leftHandSide.Value(), rightHandSide.Value())
 
 	// Test for Left
 	m = NewLVal(3)
-	leftHandSide = m.FMap(f).FMap(g)
-	rightHandSide = m.FMap(func(x int) Either[int] { return f(x).FMap(g) })
+	leftHandSide = m.FlatMap(f).FlatMap(g)
+	rightHandSide = m.FlatMap(func(x int) Either[int] { return f(x).FlatMap(g) })
 	is.Equal(leftHandSide.Left(), rightHandSide.Left())
 }

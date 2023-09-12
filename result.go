@@ -6,7 +6,8 @@ type Result[T any] interface {
 	Value() T
 	Failure() bool
 	Success() bool
-	FMap(func(T) Result[T]) Result[T]
+	Map(func(T) Result[any]) Result[any]
+	FlatMap(func(T) Result[T]) Result[T]
 	Or(ErrorHandler[T]) Result[T]
 }
 
@@ -35,9 +36,14 @@ func (s Success[_]) Success() bool {
 	return true
 }
 
-// FMap executes the callback function and returns a success with the value changed to the result of the callback
-func (s Success[T]) FMap(t func(T) Result[T]) Result[T] {
-	return t(s.val)
+// Map executes the callback functions and returns a result with the value changed to any type.
+func (s Success[T]) Map(f func(T) Result[any]) Result[any] {
+	return f(s.val)
+}
+
+// FlatMap executes the callback function and returns a success with the value changed to the result of the callback
+func (s Success[T]) FlatMap(f func(T) Result[T]) Result[T] {
+	return f(s.val)
 }
 
 // Or returns the success
@@ -75,8 +81,13 @@ func (f Failure[_]) Success() bool {
 	return false
 }
 
-// FMap returns the original failure
-func (f Failure[T]) FMap(_ func(T) Result[T]) Result[T] {
+// Map returns the original failure in a Result[any] monad
+func (f Failure[T]) Map(_ func(T) Result[any]) Result[any] {
+	return Failure[any](f)
+}
+
+// FlatMap returns the original failure
+func (f Failure[T]) FlatMap(_ func(T) Result[T]) Result[T] {
 	return f
 }
 

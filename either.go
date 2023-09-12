@@ -6,7 +6,8 @@ type Either[T any] interface {
 	Value() T
 	Left() bool
 	Right() bool
-	FMap(func(T) Either[T]) Either[T]
+	Map(func(T) Either[any]) Either[any]
+	FlatMap(func(T) Either[T]) Either[T]
 	Or(func(T) Either[T]) Either[T]
 }
 
@@ -37,8 +38,13 @@ func (l Left[T]) Right() bool {
 	return false
 }
 
-// FMap returns itself.
-func (l Left[T]) FMap(_ func(T) Either[T]) Either[T] {
+// Map applies the mapping function to the Left value and returns a new Either
+func (l Left[T]) Map(f func(T) Either[any]) Either[any] {
+	return f(l.val)
+}
+
+// FlatMap returns itself.
+func (l Left[T]) FlatMap(_ func(T) Either[T]) Either[T] {
 	return l
 }
 
@@ -60,26 +66,31 @@ func NewRVal[T any](t T) Either[T] {
 }
 
 // Value gets the underlying value.
-func (l Right[T]) Value() T {
-	return l.val
+func (r Right[T]) Value() T {
+	return r.val
 }
 
 // Left is false.
-func (l Right[T]) Left() bool {
+func (r Right[T]) Left() bool {
 	return false
 }
 
 // Right is false.
-func (l Right[T]) Right() bool {
+func (r Right[T]) Right() bool {
 	return true
 }
 
-// FMap applies its callback.
-func (l Right[T]) FMap(f func(T) Either[T]) Either[T] {
-	return f(l.val)
+// Map applies the mapping function to the Right value and returns a new Either
+func (r Right[T]) Map(f func(T) Either[any]) Either[any] {
+	return f(r.val)
+}
+
+// FlatMap applies its callback.
+func (r Right[T]) FlatMap(f func(T) Either[T]) Either[T] {
+	return f(r.val)
 }
 
 // Or returns itself.
-func (l Right[T]) Or(f func(T) Either[T]) Either[T] {
-	return l
+func (r Right[T]) Or(f func(T) Either[T]) Either[T] {
+	return r
 }

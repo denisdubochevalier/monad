@@ -20,15 +20,15 @@ func ExampleMaybe() {
 	m3 := monad.None[any]()
 	spew.Printf("m3 := monad.None[any]() -> %#v\n", m3.Value())
 
-	spew.Println("\nFMap:\n=====")
-	m4 := m1.FMap(func(x int) monad.Maybe[int] { return monad.Some(x * 2) })
+	spew.Println("\nFlatMap:\n=====")
+	m4 := m1.FlatMap(func(x int) monad.Maybe[int] { return monad.Some(x * 2) })
 	spew.Printf(
-		"m4 := m1.FMap(func(x int) monad.Maybe[int] { return monad.Some(x * 2) }) -> %#v\n",
+		"m4 := m1.FlatMap(func(x int) monad.Maybe[int] { return monad.Some(x * 2) }) -> %#v\n",
 		m4.Value(),
 	)
-	m5 := m2.FMap(func(x int) monad.Maybe[int] { return monad.Some(x * 2) })
+	m5 := m2.FlatMap(func(x int) monad.Maybe[int] { return monad.Some(x * 2) })
 	spew.Printf(
-		"m5 := m2.FMap(func(x int) monad.Maybe[int] { return monad.Some(x * 2) }) -> %#v\n",
+		"m5 := m2.FlatMap(func(x int) monad.Maybe[int] { return monad.Some(x * 2) }) -> %#v\n",
 		m5.Value(),
 	)
 
@@ -72,10 +72,10 @@ func ExampleMaybe() {
 	// m2 := monad.Nullable[int](new(int)) -> (int)0
 	// m3 := monad.None[any]() -> (interface {})<nil>
 	//
-	// FMap:
+	// FlatMap:
 	// =====
-	// m4 := m1.FMap(func(x int) monad.Maybe[int] { return monad.Some(x * 2) }) -> (int)10
-	// m5 := m2.FMap(func(x int) monad.Maybe[int] { return monad.Some(x * 2) }) -> (int)0
+	// m4 := m1.FlatMap(func(x int) monad.Maybe[int] { return monad.Some(x * 2) }) -> (int)10
+	// m5 := m2.FlatMap(func(x int) monad.Maybe[int] { return monad.Some(x * 2) }) -> (int)0
 	//
 	// Filter:
 	// =======

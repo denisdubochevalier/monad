@@ -10,7 +10,7 @@ func TestMaybeLeftIdentityLaw(t *testing.T) {
 	// The left identity law essentially posits that return a >>= f is the same as
 	// f a, where return a produces a monad encapsulating a, and >>= denotes
 	// monadic binding. Since Go doesn't have native monadic syntax, we'll use the
-	// FMap method to represent this concept.
+	// FlatMap method to represent this concept.
 	t.Parallel()
 	is := require.New(t)
 
@@ -18,10 +18,10 @@ func TestMaybeLeftIdentityLaw(t *testing.T) {
 	a := 3
 
 	// Test for Just
-	is.Equal(Some(a).FMap(f).Value(), f(a).Value())
+	is.Equal(Some(a).FlatMap(f).Value(), f(a).Value())
 
 	// Test for Nothing
-	is.Equal(None[int]().FMap(f).IsNothing(), None[int]().IsNothing())
+	is.Equal(None[int]().FlatMap(f).IsNothing(), None[int]().IsNothing())
 }
 
 func TestMaybeRightIdentityLaw(t *testing.T) {
@@ -36,10 +36,10 @@ func TestMaybeRightIdentityLaw(t *testing.T) {
 	m := Some(3)
 
 	// Test for Just
-	is.Equal(m.FMap(Some).Value(), m.Value())
+	is.Equal(m.FlatMap(Some).Value(), m.Value())
 
 	// Test for Nothing
-	is.Equal(None[int]().FMap(Some).IsNothing(), None[int]().IsNothing())
+	is.Equal(None[int]().FlatMap(Some).IsNothing(), None[int]().IsNothing())
 }
 
 func TestMaybeAssociativityLaw(t *testing.T) {
@@ -63,14 +63,14 @@ func TestMaybeAssociativityLaw(t *testing.T) {
 	g := func(x int) Maybe[int] { return Some(x * 2) }
 
 	// Test for Just
-	leftHandSide := m.FMap(f).FMap(g)
-	rightHandSide := m.FMap(func(x int) Maybe[int] { return f(x).FMap(g) })
+	leftHandSide := m.FlatMap(f).FlatMap(g)
+	rightHandSide := m.FlatMap(func(x int) Maybe[int] { return f(x).FlatMap(g) })
 	is.Equal(leftHandSide.Value(), rightHandSide.Value())
 
 	// Test for Nothing
 	m = None[int]()
-	leftHandSide = m.FMap(f).FMap(g)
-	rightHandSide = m.FMap(func(x int) Maybe[int] { return f(x).FMap(g) })
+	leftHandSide = m.FlatMap(f).FlatMap(g)
+	rightHandSide = m.FlatMap(func(x int) Maybe[int] { return f(x).FlatMap(g) })
 	is.Equal(leftHandSide.IsNothing(), rightHandSide.IsNothing())
 }
 

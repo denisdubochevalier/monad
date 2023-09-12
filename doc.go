@@ -29,7 +29,7 @@
 // an error. Unlike Maybe and Either, Result explicitly deals with Go's native
 // error type.
 //
-// Each monad has a set of functional methods, primarily `FMap` and `Or`, to
+// Each monad has a set of functional methods, primarily `FlatMap` and `Or`, to
 // facilitate function composition, control flow, and side-effect management.
 //
 // Usage:
