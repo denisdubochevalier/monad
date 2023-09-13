@@ -1,6 +1,6 @@
 # monad
 
-![Go Version](https://img.shields.io/badge/Go-%3E%3D%201.20-%23007d9c)
+![GitHub go.mod Go version (subdirectory of monorepo)](https://img.shields.io/github/go-mod/go-version/denisdubochevalier/monad)
 [![GoDoc](https://godoc.org/github.com/denisdubochevalier/monad?status.svg)](https://pkg.go.dev/github.com/denisdubochevalier/monad)
 ![Build Status](https://github.com/denisdubochevalier/monad/actions/workflows/go.yml/badge.svg)
 ![Lint Status](https://github.com/denisdubochevalier/monad/actions/workflows/golangci-lint.yml/badge.svg)
@@ -28,21 +28,54 @@ package serves as a bedrock for complex, side-effect-free computations.
   performance.
 - Extensive test coverage to ensure adherence to monadic laws.
 
-## Planned Additions
+## What's Next
 
-- [ ] RWS (Reader-Writer-State) Monad
-- [ ] Promise Monad
-- [ ] Try Monad
-- [ ] Logic Monad
-- [ ] Event Monad
-- [ ] Transaction Monad
-- [ ] Parser Combinators as Monads
-- [ ] Probabilistic Monad
-- [ ] Co-Routine Monad
-- [ ] Lens Monad
-- [ ] Process Monad
+The current version of this monadic library serves as a foundational layer upon
+which more advanced functionalities can be built. The roadmap ahead is exciting
+and aims to elevate this project from a basic utility to a comprehensive toolkit
+for functional programming in Go.
+
+## Proper Examples for Each Monad
+
+- **In-Situ Examples**: Each monad will be accompanied by in-situ examples to
+  elucidate its practical applications.
+
+- `example_test.go`: The examples will be implemented as `_test.go` files,
+  serving dual roles as instructive code snippets and as integration tests.
+
+## New Monads
+
+- **Additional Monads**: Expanding the library's repertoire to include other
+  essential monads like the following:
+  - [ ] RWS (Reader-Writer-State) Monad
+  - [ ] Promise Monad
+  - [ ] Try Monad
+  - [ ] Logic Monad
+  - [ ] Event Monad
+  - [ ] Transaction Monad
+  - [ ] Parser Combinators as Monads
+  - [ ] Probabilistic Monad
+  - [ ] Co-Routine Monad
+  - [ ] Lens Monad
+  - [ ] Process Monad
+- **Community Contributions**: We are open to contributions for implementing
+  monads that are currently not part of the library but would offer significant
+  value.
+
+## Monad Composition and Monad Transformers
+
+- **Composition**: Introducing methods to compose multiple monads into new, more
+  powerful constructs.
+- **Transformers**: Implementing monad transformers that enable more complex
+  operations by stacking multiple monads.
+- **Real-world Scenarios**: Accompanying the above with examples and
+  documentation that demonstrate these advanced concepts in action, showing how
+  they solve real-world problems.
 
 ## Installation
+
+Due to the heavy use of on-the-edge generics, `monad` requires go version >
+1.21.0
 
 ```bash
 go get github.com/denisdubochevalier/monad
